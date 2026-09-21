@@ -13,6 +13,7 @@ type Record struct {
     Actors []string `json:"actors"`
     Facts []string `json:"facts"`
     Constraints []string `json:"constraints"`
+    Workflow []string `json:"workflow,omitempty"`
 }
 
 // Parse 读取并检查带版本的业务资料。
@@ -21,6 +22,9 @@ func Parse(raw []byte) (Record, error) {
     if err := json.Unmarshal(raw, &value); err != nil { return Record{}, err }
     if value.Domain == "" || value.Version < 1 || value.SampleID == "" || len(value.Actors) < 2 || len(value.Facts) < 2 || len(value.Constraints) < 2 {
         return Record{}, errors.New("共享资料缺少必要字段")
+    }
+    for _, stage := range value.Workflow {
+        if stage == "" { return Record{}, errors.New("流程阶段不能为空") }
     }
     return value, nil
 }
