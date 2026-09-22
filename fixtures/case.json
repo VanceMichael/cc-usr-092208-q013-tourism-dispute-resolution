@@ -1,0 +1,195 @@
+{
+  "case_id": "AJ-2026-013",
+  "contract": {
+    "id": "HT-2026-0810",
+    "tourist": "游客甲",
+    "operator": "韩进旅行社",
+    "items": [
+      {
+        "id": "svc-flight",
+        "supplier": "迅航承运",
+        "title": "境内段机票（首尔—西安—桂林）",
+        "price": { "amount": 1200, "currency": "CNY" }
+      },
+      {
+        "id": "svc-scenic",
+        "supplier": "云山景区",
+        "title": "云山景区门票及索道",
+        "price": { "amount": 480, "currency": "CNY" }
+      },
+      {
+        "id": "svc-guide",
+        "supplier": "华东地接社",
+        "title": "地接导游服务",
+        "price": { "amount": 600, "currency": "CNY" }
+      }
+    ]
+  },
+  "performance": [
+    {
+      "item_id": "svc-flight",
+      "status": "cancelled",
+      "shortfall": 1,
+      "occurred_at": "2026-08-12T08:00:00Z",
+      "note": "承运人因航班计划变化取消西安—桂林航段"
+    },
+    {
+      "item_id": "svc-scenic",
+      "status": "partial",
+      "shortfall": 0.5,
+      "occurred_at": "2026-08-13T15:00:00Z",
+      "note": "索道午后停运，仅完成半日游览"
+    },
+    {
+      "item_id": "svc-guide",
+      "status": "fulfilled",
+      "shortfall": 0,
+      "occurred_at": "2026-08-13T18:00:00Z",
+      "note": "导游服务全程完成"
+    }
+  ],
+  "claims": [
+    {
+      "id": "clm-001",
+      "claimant": "游客甲",
+      "item_ids": ["svc-flight"],
+      "amount": { "amount": 1200, "currency": "CNY" },
+      "grounds": "航班变化取消境内段，要求退还票款",
+      "status": "negotiating"
+    },
+    {
+      "id": "clm-002",
+      "claimant": "游客甲",
+      "item_ids": ["svc-flight"],
+      "amount": { "amount": 1200, "currency": "CNY" },
+      "grounds": "航班变化取消境内段，要求退还票款",
+      "status": "open"
+    },
+    {
+      "id": "clm-003",
+      "claimant": "游客乙",
+      "item_ids": ["svc-scenic"],
+      "amount": { "amount": 240, "currency": "CNY" },
+      "grounds": "景区部分履约，要求退还半日费用",
+      "status": "open"
+    },
+    {
+      "id": "clm-004",
+      "claimant": "游客乙",
+      "item_ids": ["svc-guide"],
+      "amount": { "amount": 100, "currency": "CNY" },
+      "grounds": "导游讲解时长不足",
+      "status": "settled"
+    }
+  ],
+  "statements": [
+    { "author": "游客甲", "language": "ko", "text": "항공편 변경으로 국내 구간이 취소되었습니다." },
+    { "author": "韩进旅行社", "language": "en", "text": "The segment was cancelled by the carrier's schedule change." },
+    { "author": "华东地接社", "language": "zh", "text": "地接已按调整后的行程完成当日服务。" }
+  ],
+  "evidence": [
+    {
+      "id": "ev-001",
+      "kind": "receipt",
+      "item_id": "svc-flight",
+      "submitted_by": "游客甲",
+      "submitted_at": "2026-08-14T09:30:00Z",
+      "supplement": false
+    },
+    {
+      "id": "ev-002",
+      "kind": "confirmation",
+      "item_id": "svc-scenic",
+      "submitted_by": "云山景区",
+      "submitted_at": "2026-08-14T11:00:00Z",
+      "supplement": false
+    },
+    {
+      "id": "ev-003",
+      "kind": "receipt",
+      "item_id": "svc-scenic",
+      "submitted_by": "游客乙",
+      "submitted_at": "2026-08-14T12:00:00Z",
+      "supplement": false
+    },
+    {
+      "id": "ev-004",
+      "kind": "document",
+      "item_id": "svc-flight",
+      "submitted_by": "迅航承运",
+      "submitted_at": "2026-08-15T09:00:00Z",
+      "supplement": true
+    },
+    {
+      "id": "ev-005",
+      "kind": "document",
+      "submitted_by": "调解中心",
+      "submitted_at": "2026-08-14T09:00:00Z",
+      "supplement": false
+    }
+  ],
+  "fx": [
+    { "base": "CNY", "quote": "KRW", "rate": 190, "as_of": "2026-08-15T00:00:00Z" }
+  ],
+  "opinions": [
+    { "party": "迅航承运", "item_id": "svc-flight", "accepts": true, "note": "航班计划变化属承运人责任" },
+    { "party": "华东地接社", "item_id": "svc-scenic", "accepts": true, "note": "地接自认行程衔接协调不力" }
+  ],
+  "events": [
+    { "seq": 1, "kind": "case_opened", "actor": "游客甲", "occurred_at": "2026-08-14T09:00:00Z", "detail": "游客就取消航段提起协商" },
+    { "seq": 2, "kind": "companion_split", "actor": "调解中心", "occurred_at": "2026-08-14T10:00:00Z", "detail": "同行人拆分：游客乙的索赔独立登记" },
+    { "seq": 3, "kind": "partial_performance", "item_id": "svc-scenic", "actor": "云山景区", "occurred_at": "2026-08-14T11:00:00Z", "detail": "确认当日仅完成半日游览" },
+    { "seq": 4, "kind": "evidence_supplement", "item_id": "svc-flight", "actor": "迅航承运", "occurred_at": "2026-08-15T09:00:00Z", "detail": "补交航班取消证明" },
+    { "seq": 5, "kind": "deadline_suspended", "actor": "调解中心", "occurred_at": "2026-08-16T09:00:00Z", "detail": "等待补交材料，协商时限暂停" },
+    { "seq": 6, "kind": "deadline_resumed", "actor": "调解中心", "occurred_at": "2026-08-18T09:00:00Z", "detail": "材料齐备，协商时限恢复" },
+    { "seq": 7, "kind": "mediation_failed", "item_id": "svc-scenic", "actor": "调解中心", "occurred_at": "2026-08-20T09:00:00Z", "detail": "景区半日费用协商未果，转入书面结论程序" },
+    { "seq": 8, "kind": "payment_reversed", "actor": "跨境付", "occurred_at": "2026-08-21T09:00:00Z", "detail": "原路退回一笔重复扣款" },
+    { "seq": 9, "kind": "refund_executed", "item_id": "svc-flight", "actor": "迅航承运", "occurred_at": "2026-08-22T09:00:00Z", "detail": "执行境内段票款退款" },
+    { "seq": 10, "kind": "voucher_issued", "item_id": "svc-scenic", "actor": "云山景区", "occurred_at": "2026-08-22T10:00:00Z", "detail": "发放景区代金券" },
+    { "seq": 11, "kind": "conclusion_issued", "actor": "调解中心", "occurred_at": "2026-08-23T09:00:00Z", "detail": "出具逐项书面结论" }
+  ],
+  "executions": [
+    {
+      "id": "exe-001",
+      "kind": "refund",
+      "party": "迅航承运",
+      "expected": { "amount": 1200, "currency": "CNY" },
+      "actual": { "amount": 1200, "currency": "CNY" },
+      "due_at": "2026-08-25T00:00:00Z",
+      "done_at": "2026-08-22T09:00:00Z",
+      "reference": "PAY-88213"
+    },
+    {
+      "id": "exe-002",
+      "kind": "voucher",
+      "party": "云山景区",
+      "expected": { "amount": 240, "currency": "CNY" },
+      "actual": { "amount": 200, "currency": "CNY" },
+      "due_at": "2026-08-25T00:00:00Z",
+      "done_at": "2026-08-22T10:00:00Z",
+      "reference": "VCH-3107"
+    },
+    {
+      "id": "exe-003",
+      "kind": "conclusion",
+      "party": "调解中心",
+      "expected": { "amount": 0, "currency": "CNY" },
+      "actual": { "amount": 0, "currency": "CNY" },
+      "due_at": "2026-08-22T18:00:00Z",
+      "done_at": "2026-08-23T09:00:00Z",
+      "reference": "CON-2026-013"
+    },
+    {
+      "id": "exe-004",
+      "kind": "refund",
+      "party": "跨境付",
+      "expected": { "amount": 240, "currency": "CNY" },
+      "actual": { "amount": 0, "currency": "CNY" },
+      "due_at": "2026-08-30T00:00:00Z",
+      "reference": ""
+    }
+  ],
+  "next_party": {
+    "svc-flight": "迅航承运"
+  }
+}

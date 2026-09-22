@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "跨境旅程争议协商案件资料",
+  "type": "object",
+  "required": [
+    "case_id",
+    "contract",
+    "performance",
+    "claims",
+    "statements",
+    "evidence",
+    "fx",
+    "opinions",
+    "events",
+    "executions",
+    "next_party"
+  ],
+  "properties": {
+    "case_id": { "type": "string", "minLength": 1 },
+    "contract": {
+      "type": "object",
+      "required": ["id", "tourist", "operator", "items"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "tourist": { "type": "string", "minLength": 1 },
+        "operator": { "type": "string", "minLength": 1 },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "supplier", "title", "price"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "supplier": { "type": "string", "minLength": 1 },
+              "title": { "type": "string" },
+              "price": { "$ref": "#/$defs/money" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "performance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item_id", "status", "shortfall", "occurred_at", "note"],
+        "properties": {
+          "item_id": { "type": "string", "minLength": 1 },
+          "status": { "enum": ["fulfilled", "partial", "cancelled"] },
+          "shortfall": { "type": "number", "minimum": 0, "maximum": 1 },
+          "occurred_at": { "type": "string", "format": "date-time" },
+          "note": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "claimant", "item_ids", "amount", "grounds", "status"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "claimant": { "type": "string", "minLength": 1 },
+          "item_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "amount": { "$ref": "#/$defs/money" },
+          "grounds": { "type": "string" },
+          "status": { "enum": ["open", "negotiating", "settled", "escalated", "withdrawn"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "statements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["author", "language", "text"],
+        "properties": {
+          "author": { "type": "string", "minLength": 1 },
+          "language": { "type": "string", "minLength": 2 },
+          "text": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "submitted_by", "submitted_at", "supplement"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "kind": { "enum": ["receipt", "confirmation", "document"] },
+          "item_id": { "type": "string" },
+          "submitted_by": { "type": "string", "minLength": 1 },
+          "submitted_at": { "type": "string", "format": "date-time" },
+          "supplement": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "fx": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["base", "quote", "rate", "as_of"],
+        "properties": {
+          "base": { "type": "string", "minLength": 3 },
+          "quote": { "type": "string", "minLength": 3 },
+          "rate": { "type": "number", "exclusiveMinimum": 0 },
+          "as_of": { "type": "string", "format": "date-time" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "opinions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["party", "item_id", "accepts", "note"],
+        "properties": {
+          "party": { "type": "string", "minLength": 1 },
+          "item_id": { "type": "string", "minLength": 1 },
+          "accepts": { "type": "boolean" },
+          "note": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["seq", "kind", "actor", "occurred_at", "detail"],
+        "properties": {
+          "seq": { "type": "integer", "minimum": 1 },
+          "kind": {
+            "enum": [
+              "case_opened",
+              "companion_split",
+              "partial_performance",
+              "evidence_supplement",
+              "deadline_suspended",
+              "deadline_resumed",
+              "mediation_failed",
+              "payment_reversed",
+              "refund_executed",
+              "voucher_issued",
+              "conclusion_issued"
+            ]
+          },
+          "item_id": { "type": "string" },
+          "actor": { "type": "string", "minLength": 1 },
+          "occurred_at": { "type": "string", "format": "date-time" },
+          "detail": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "executions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "party", "expected", "actual", "due_at", "reference"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "kind": { "enum": ["refund", "voucher", "conclusion"] },
+          "party": { "type": "string", "minLength": 1 },
+          "expected": { "$ref": "#/$defs/money" },
+          "actual": { "$ref": "#/$defs/money" },
+          "due_at": { "type": "string", "format": "date-time" },
+          "done_at": { "type": "string", "format": "date-time" },
+          "reference": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "next_party": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "minLength": 1 }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "money": {
+      "type": "object",
+      "required": ["amount", "currency"],
+      "properties": {
+        "amount": { "type": "number" },
+        "currency": { "type": "string", "minLength": 3 }
+      },
+      "additionalProperties": false
+    }
+  }
+}
